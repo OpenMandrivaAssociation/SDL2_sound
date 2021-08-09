@@ -1,0 +1,52 @@
+From 6fca42658677133ae9fee4e47fcbb577e528cea0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@lindev.ch>
+Date: Mon, 9 Aug 2021 03:00:51 +0200
+Subject: [PATCH] Fix build on OpenMandriva (and probably other distros)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Building current SDL2_sound on OpenMandriva results in a build failure
+(#include "SDL.h" fails); if fixed, it results in a linking failure
+(unresolved symbols for everything that's supposed to come from SDL).
+
+Looking at it, the problem is that SDL_sound CMakeLists.txt assumes
+"find_package(SDL2 REQUIRED)" sets SDL2_INCLUDE_DIRS and
+SDL2_LIBRARIES -- when in fact it (or at least the version we have)
+sets SDL2_INCLUDE_DIR and SDL2_LIBRARY.
+
+Looks like there are 2 different not fully compatible versions of
+FindSDL2.cmake around (ours comes from SDL2 2.0.14).
+
+This patch adds SDL2_INCLUDE_DIR and SDL2_LIBRARY -- works here, and
+should be harmless even with the other FindSDL2.cmake (given they'll
+just expand to nothing, as SDL2_INCLUDE_DIRS and SDL2_LIBRARIES does
+here).
+
+Signed-off-by: Bernhard Rosenkränzer <bero@lindev.ch>
+---
+ CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c7c24e3..a43d348 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -30,7 +30,7 @@ if(CMAKE_C_COMPILER_ID STREQUAL "SunPro")
+ endif()
+ 
+ find_package(SDL2 REQUIRED)
+-include_directories(${SDL2_INCLUDE_DIRS})
++include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR})
+ if(WIN32)
+     # -lmingw32: gcc adds it automatically.
+     # -mwindows: doesn't make sense.
+@@ -166,7 +166,7 @@ if(SDLSOUND_BUILD_SHARED)
+         # avoid DLL having "lib" prefix
+         SET(CMAKE_SHARED_LIBRARY_PREFIX "")
+     endif()
+-    target_link_libraries(SDL2_sound ${SDL2_LIBRARIES} ${OPTIONAL_LIBRARY_LIBS} ${OTHER_LDFLAGS})
++    target_link_libraries(SDL2_sound ${SDL2_LIBRARIES} ${SDL2_LIBRARY} ${OPTIONAL_LIBRARY_LIBS} ${OTHER_LDFLAGS})
+     set(SDLSOUND_LIB_TARGET SDL2_sound)
+     set(SDLSOUND_INSTALL_TARGETS ${SDLSOUND_INSTALL_TARGETS} ";SDL2_sound")
+ endif()
