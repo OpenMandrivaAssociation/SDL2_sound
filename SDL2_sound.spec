@@ -3,6 +3,8 @@
 %define develname %mklibname %{name} -d
 %define staticname %mklibname %{name} -d -s
 
+%define oname SDL_sound
+
 #define date 20210809
 
 Summary:	An abstract SDL soundfile decoder
@@ -12,7 +14,7 @@ Release:	%{?date:0.%{date}.}1
 Group:		Sound
 License:	LGPLv2+
 URL:		http://www.icculus.org/SDL_sound
-Source0:	https://github.com/icculus/SDL_sound/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
+Source0:	https://github.com/icculus/SDL_sound/archive/refs/tags/v%{version}/%{oname}-%{version}.tar.gz
 
 BuildRequires:	cmake ninja
 BuildRequires:	pkgconfig(sdl2)
@@ -73,7 +75,7 @@ Requires:	%{develname} = %{version}-%{release}
 Static SDL_sound libraries.
 
 %prep
-%autosetup -p1
+%autosetup -n %{oname}-%{version} -p1
 %cmake -G Ninja
 
 %build
