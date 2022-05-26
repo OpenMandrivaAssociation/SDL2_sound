@@ -3,22 +3,19 @@
 %define develname %mklibname %{name} -d
 %define staticname %mklibname %{name} -d -s
 
-%define date 20210809
+%define oname SDL_sound
+
+#define date 20210809
 
 Summary:	An abstract SDL soundfile decoder
 Name:		SDL2_sound
-Version:	2.0.0
+Version:	2.0.1
 Release:	%{?date:0.%{date}.}1
 Group:		Sound
 License:	LGPLv2+
 URL:		http://www.icculus.org/SDL_sound
-# 
-Source0:	https://github.com/icculus/SDL_sound/archive/refs/heads/main.tar.gz
-# There seem to be 2 different versions of SDL detection cmake
-# files -- upstream assumes they set SDL2_LIBRARIES and SDL2_INCLUDE_DIRS
-# while the version we have sets SDL2_LIBRARY and SDL2_INCLUDE_DIR
-# Let's support both variants...
-Patch0:		https://github.com/icculus/SDL_sound/pull/23.patch
+Source0:	https://github.com/icculus/SDL_sound/archive/refs/tags/v%{version}/%{oname}-%{version}.tar.gz
+
 BuildRequires:	cmake ninja
 BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	pkgconfig(flac)
@@ -78,7 +75,7 @@ Requires:	%{develname} = %{version}-%{release}
 Static SDL_sound libraries.
 
 %prep
-%autosetup -p1 -n SDL_sound-main
+%autosetup -n %{oname}-%{version} -p1
 %cmake -G Ninja
 
 %build
