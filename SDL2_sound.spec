@@ -19,7 +19,7 @@ Source0:	https://github.com/icculus/SDL_sound/archive/refs/tags/v%{version}/%{on
 BuildRequires:	cmake ninja
 BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	pkgconfig(flac)
-BuildRequires:	libmikmod-devel
+BuildRequires:	pkgconfig(libmikmod)
 BuildRequires:	pkgconfig(libmodplug)
 BuildRequires:	pkgconfig(vorbis)
 BuildRequires:	pkgconfig(speex)
@@ -92,6 +92,8 @@ Static SDL_sound libraries.
 
 %files -n %{develname}
 %{_libdir}/lib*.so
+%{_libdir}/cmake/SDL2_sound/
+%{_libdir}/pkgconfig/SDL2_sound.pc
 %{_includedir}/SDL2/*
 
 %files -n %{staticname}
