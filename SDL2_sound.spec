@@ -13,7 +13,7 @@ Version:	2.0.2
 Release:	%{?date:0.%{date}.}1
 Group:		Sound
 License:	LGPLv2+
-URL:		http://www.icculus.org/SDL_sound
+URL:		https://www.icculus.org/SDL_sound
 Source0:	https://github.com/icculus/SDL_sound/archive/refs/tags/v%{version}/%{oname}-%{version}.tar.gz
 
 BuildRequires:	cmake ninja
