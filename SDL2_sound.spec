@@ -9,7 +9,7 @@
 
 Summary:	An abstract SDL soundfile decoder
 Name:		SDL2_sound
-Version:	2.0.2
+Version:	2.0.4
 Release:	%{?date:0.%{date}.}1
 Group:		Sound
 License:	LGPLv2+
